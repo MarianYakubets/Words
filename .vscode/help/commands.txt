@@ -1,0 +1,6 @@
+Using the terminal, navigate to the location where your Visual Studio Code project is and type the following two commands (replace my .git project with yours) :
+
+git remote add origin https://github.com/MarianYakubets/Words
+git push -u origin master
+
+
