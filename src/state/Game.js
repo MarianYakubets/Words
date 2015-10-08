@@ -1,7 +1,7 @@
 
 Words.Game = function (game) {
 
-	//	When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
+    //	When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
     this.game;		//	a reference to the currently running game
     this.add;		//	used to add sprites, text, groups, etc
@@ -26,27 +26,30 @@ Words.Game = function (game) {
 
 Words.Game.prototype = {
 
-	create: function () {
-		//	Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-            var level = this.game.cache.getJSON('level');
-            var words = level.words;
-            alert(words);
-	},
+    create: function () {
+        //	Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
+        var level = this.game.cache.getJSON('level');
+        var words = level.words;
+        words.forEach(function (w, i) {
+            this.game.add.text(i * 100, i * 50, w, { font: "bold 32px Arial", fill: "#ff0044" });
+        }, this);
 
-	update: function () {
+    },
 
-		//	Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
+    update: function () {
 
-	},
+        //	Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
 
-	quitGame: function (pointer) {
+    },
 
-		//	Here you should destroy anything you no longer need.
-		//	Stop music, delete sprites, purge caches, free resources, all that good stuff.
+    quitGame: function (pointer) {
 
-		//	Then let's go back to the main menu.
-		this.state.start('MainMenu');
+        //	Here you should destroy anything you no longer need.
+        //	Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
-	}
+        //	Then let's go back to the main menu.
+        this.state.start('MainMenu');
+
+    }
 
 };
