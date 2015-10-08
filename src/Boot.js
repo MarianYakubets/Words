@@ -1,4 +1,5 @@
 /* global Words */
+
 Words = {
 
     /* Here we've just got some global level vars that persist regardless of State swaps */
