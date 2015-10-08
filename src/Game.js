@@ -1,5 +1,5 @@
 
-BasicGame.Game = function (game) {
+Words.Game = function (game) {
 
 	//	When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
@@ -24,12 +24,13 @@ BasicGame.Game = function (game) {
 
 };
 
-BasicGame.Game.prototype = {
+Words.Game.prototype = {
 
 	create: function () {
-
 		//	Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-
+            var level = this.game.cache.getJSON('level');
+            var words = level.words;
+            alert(words);
 	},
 
 	update: function () {
