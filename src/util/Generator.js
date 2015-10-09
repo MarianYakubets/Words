@@ -9,6 +9,19 @@ Generator.generateLevel = function (words) {
 	}
 	var width = Math.floor(Math.sqrt(summ));
 	var heigth = summ / width;
-	alert(width);
-	alert(heigth);
+
+	alert(Generator.getRandomNumber(11, 21));
+};
+
+Generator.getRandomNumber = function (min, max) {
+	return (Math.round(Math.random() * (max - min)) + min);
+};
+
+Generator.getEmptyAreas = function (cells) {
+};
+
+Generator.getSortedArray = function (arr, appending) {
+};
+
+Generator.isSmallestAreaEnoughForSmallestWord = function (areas, words) {
 };
