@@ -33,7 +33,7 @@ Words.Game.prototype = {
         words.forEach(function (w, i) {
             this.game.add.text(i * 100, i * 50, w, { font: "bold 32px Arial", fill: "#ff0044" });
         }, this);
-
+        Generator.generateLevel(words);
     },
 
     update: function () {

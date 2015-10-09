@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
 	<title>Phaser Full Screen Mobile Example</title>
 	<meta charset="utf-8">
@@ -32,19 +33,20 @@
 	<link rel="apple-touch-icon" sizes="1024x1024" href="icons/app_icon_1024x1024.png">
 	<link rel="stylesheet" href="css/stylesheet.css" type="text/css" charset="utf-8" />
 	<script src="lib/phaser.js"></script>
+	<script src="src/util/Generator.js"></script>
 	<script src="src/state/Boot.js"></script>
 	<script src="src/state/Preloader.js"></script>
 	<script src="src/state/MainMenu.js"></script>
 	<script src="src/state/Game.js"></script>
 </head>
+
 <body>
 
 	<div id="game"></div>
 	<div id="orientation"></div>
 
-<script type="text/javascript">
-
-(function () {
+	<script type="text/javascript">
+		(function () {
 
 	//	Create your Phaser game and inject it into the game div.
 	//	We did it in a window.onload event, but you can do it anywhere (requireJS load, anonymous function, jQuery dom ready, - whatever floats your boat)
@@ -62,7 +64,9 @@
 	game.state.start('Boot');
 
 })();
-</script>
+
+	</script>
 
 </body>
+
 </html>
