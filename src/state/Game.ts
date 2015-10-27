@@ -1,5 +1,5 @@
 module Words {
-
+"use strict"
 	export class Game {
 		game: Phaser.Game;
 
@@ -13,10 +13,10 @@ module Words {
 		}
 
 		create() {
-			//var obj:any = this.game.cache.getJSON('level');
-			//var list:List = new List();
-			//list.fillFromJSON(obj);
-			//alert(list.getElements());
+			var obj:any = this.game.cache.getJSON('level');
+			var level:Level = new Level();
+			level.fillFromJSON(obj);
+			alert(level.getElements());
 		}
 	}
 }
