@@ -6,14 +6,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Level = (function (_super) {
     __extends(Level, _super);
     function Level() {
-        _super.apply(this, arguments);
+        _super.call(this);
     }
     Level.prototype.getElements = function () { return this.elements; };
     return Level;
 })(Serializable);
 var Words;
 (function (Words) {
-    "use strict";
     var Game = (function () {
         function Game() {
             this.game = new Phaser.Game(640, 480, Phaser.AUTO, 'content', {
@@ -35,3 +34,14 @@ var Words;
 window.onload = function () {
     var game = new Words.Game();
 };
+var Serializable = (function () {
+    function Serializable() {
+    }
+    Serializable.prototype.fillFromJSON = function (json) {
+        var jsonObj = JSON.parse(json);
+        for (var propName in jsonObj) {
+            this[propName] = jsonObj[propName];
+        }
+    };
+    return Serializable;
+})();

@@ -1,5 +1,4 @@
 module Words {
-"use strict"
 	export class Game {
 		game: Phaser.Game;
 
