@@ -9,11 +9,9 @@ var Words;
             this.game.load.json('level', 'res/data/level1.json');
         };
         App.prototype.create = function () {
-            var obj = this.game.cache.getJSON('level');
-            alert("obj");
-            var level = new Words.Level();
-            level.fillFromJSON(obj);
-            alert(level.getWords());
+            this.game.state.add("MainMenuState", Words.MainMenuState, false);
+            this.game.state.add("GameState", Words.GameState, true);
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         };
         return App;
     })();
@@ -53,4 +51,35 @@ var Words;
         return Level;
     })(Words.Serializable);
     Words.Level = Level;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var GameState = (function (_super) {
+        __extends(GameState, _super);
+        function GameState() {
+            _super.call(this);
+        }
+        GameState.prototype.preload = function () {
+        };
+        GameState.prototype.create = function () {
+            alert("GameState");
+        };
+        return GameState;
+    })(Phaser.State);
+    Words.GameState = GameState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var MainMenuState = (function (_super) {
+        __extends(MainMenuState, _super);
+        function MainMenuState() {
+            _super.call(this);
+        }
+        MainMenuState.prototype.preload = function () {
+        };
+        MainMenuState.prototype.create = function () {
+        };
+        return MainMenuState;
+    })(Phaser.State);
+    Words.MainMenuState = MainMenuState;
 })(Words || (Words = {}));

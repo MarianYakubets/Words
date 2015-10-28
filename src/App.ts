@@ -12,7 +12,10 @@ module Words {
 		}
 
 		create() {
-		
+		    this.game.state.add("MainMenuState", Words.MainMenuState, false);
+            this.game.state.add("GameState",  Words.GameState, true);
+
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		}
 	}
 }
