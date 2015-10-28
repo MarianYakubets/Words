@@ -25,7 +25,17 @@ module Words {
 		}
 		getNeighboursCells(x: number, y: number): number[][] {
 			if (!this.belongTo(x, y)) { return; }
-			return null;
+			var ns: number[][] = [];
+			this.addIfNeighbour(x - 1, y, ns);
+			this.addIfNeighbour(x + 1, y, ns);
+			this.addIfNeighbour(x, y - 1, ns);
+			this.addIfNeighbour(x, y + 1, ns);
+			return ns;
+		}
+		addIfNeighbour(x: number, y: number, neighbours: number[][]) {
+			if (this.belongTo(x, y)) {
+				neighbours.push([x, y]);
+			}
 		}
 		getSizeofNeighbours(x: number, y: number): number {
 			if (!this.belongTo(x, y)) { return; }
