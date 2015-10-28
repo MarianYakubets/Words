@@ -1,27 +1,7 @@
-<<<<<<< HEAD
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Level = (function (_super) {
-    __extends(Level, _super);
-    function Level() {
-        _super.call(this);
-    }
-    Level.prototype.getElements = function () { return this.elements; };
-    return Level;
-})(Serializable);
-var Words;
-(function (Words) {
-    var Game = (function () {
-        function Game() {
-=======
 var Words;
 (function (Words) {
     var App = (function () {
         function App() {
->>>>>>> d8c693b22f658f9f194e40a549f14bf068cf8200
             this.game = new Phaser.Game(640, 480, Phaser.AUTO, 'content', {
                 create: this.create, preload: this.preload });
         }
@@ -149,19 +129,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-<<<<<<< HEAD
-var Serializable = (function () {
-    function Serializable() {
-    }
-    Serializable.prototype.fillFromJSON = function (json) {
-        var jsonObj = JSON.parse(json);
-        for (var propName in jsonObj) {
-            this[propName] = jsonObj[propName];
-        }
-    };
-    return Serializable;
-})();
-=======
 ///<reference path='../util/Serializable' />
 var Words;
 (function (Words) {
@@ -206,4 +173,3 @@ var Words;
     })(Phaser.State);
     Words.MainMenuState = MainMenuState;
 })(Words || (Words = {}));
->>>>>>> d8c693b22f658f9f194e40a549f14bf068cf8200
