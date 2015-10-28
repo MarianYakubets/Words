@@ -1,6 +1,5 @@
 module Words {
-"use strict"
-	export class Game {
+	export class App {
 		game: Phaser.Game;
 
 		constructor() {
@@ -13,15 +12,12 @@ module Words {
 		}
 
 		create() {
-			var obj:any = this.game.cache.getJSON('level');
-			var level:Level = new Level();
-			level.fillFromJSON(obj);
-			alert(level.getElements());
+		
 		}
 	}
 }
 
 
 window.onload = () => {
-    var game = new Words.Game();
+    var game = new Words.App();
 };
