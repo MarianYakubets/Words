@@ -63,8 +63,18 @@ module Words {
 			return 1;
 		}
 		getEmptyAreas(): number[][] {
-			return null;
+			var elements: String[][] = this.elements.slice(0, elements.length);
+			var area: number[][] = this.fillArea(0, 0, elements);
+			return area;
 		}
+
+		fillArea(x: number, y: number, elements: String[][]): number[][] {
+			if (elements[x][y] == null) {
+
+			}
+			return;
+		}
+
 		belongTo(x: number, y: number): boolean {
 			return x >= 0 && x < this.width && y >= 0 && x < this.height;
 		}

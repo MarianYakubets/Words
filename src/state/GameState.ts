@@ -10,7 +10,11 @@ module Words {
         }
 
         create() {
-            alert("GameState");
+            var level: Level = new Level();
+            var jObj = this.game.cache.getJSON('level');
+            level.fillFromJSON(jObj);
+            var matrix: CharMatrix = Generator.generateMatrixForWords(level.getWords());
+            alert(matrix);
         }
     }
 }

@@ -152,7 +152,11 @@ var Words;
         GameState.prototype.preload = function () {
         };
         GameState.prototype.create = function () {
-            alert("GameState");
+            var level = new Words.Level();
+            var jObj = this.game.cache.getJSON('level');
+            level.fillFromJSON(jObj);
+            var matrix = Words.Generator.generateMatrixForWords(level.getWords());
+            alert(matrix);
         };
         return GameState;
     })(Phaser.State);
@@ -172,4 +176,55 @@ var Words;
         return MainMenuState;
     })(Phaser.State);
     Words.MainMenuState = MainMenuState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var Generator = (function () {
+        function Generator() {
+        }
+        Generator.generateMatrixForWords = function (words) {
+            var size = Words.Utils.getWidthAndHeight(words);
+            var matrix = new Words.CharMatrix(size[0], size[1]);
+            var x = Words.Utils.getRandomNumber(0, size[0] - 1);
+            var y = Words.Utils.getRandomNumber(0, size[1] - 1);
+            alert(x + ", " + y);
+            return matrix;
+        };
+        return Generator;
+    })();
+    Words.Generator = Generator;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var Utils = (function () {
+        function Utils() {
+        }
+        Utils.getRandomNumber = function (max, min) {
+            return (Math.round(Math.random() * (max - min)) + min);
+        };
+        Utils.getRandomDirection = function (x, y) {
+            var rand = Utils.getRandomNumber(1, 4);
+            switch (rand) {
+                case 1:
+                    return [++x, y];
+                case 2:
+                    return [--x, y];
+                case 3:
+                    return [x, ++y];
+                case 4:
+                    return [x, --y];
+            }
+        };
+        Utils.getWidthAndHeight = function (words) {
+            var size = 0;
+            for (var i = 0; i < words.length; i++) {
+                size = size + words[i].length;
+            }
+            var width = Math.floor(Math.sqrt(size));
+            var heigth = size / width;
+            return [width, heigth];
+        };
+        return Utils;
+    })();
+    Words.Utils = Utils;
 })(Words || (Words = {}));
