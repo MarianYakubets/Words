@@ -1,7 +1,6 @@
-class Level extends Serializable{
-    elements: Array<String>;
-    constructor(){
-        super();
+module Words {
+    export class Level extends Serializable {
+        words: Array<String>;
+        getWords(): Array<String> { return this.words }
     }
-    getElements(): Array<String> { return this.elements }
 }

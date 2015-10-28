@@ -1,5 +1,6 @@
 module Words {
-	export class Game {
+	export class App {
+
 		game: Phaser.Game;
 
 		constructor() {
@@ -12,15 +13,15 @@ module Words {
 		}
 
 		create() {
-			var obj:any = this.game.cache.getJSON('level');
-			var level:Level = new Level();
-			level.fillFromJSON(obj);
-			alert(level.getElements());
+		    this.game.state.add("MainMenuState", Words.MainMenuState, false);
+            this.game.state.add("GameState",  Words.GameState, true);
+
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		}
 	}
 }
 
 
 window.onload = () => {
-    var game = new Words.Game();
+    var game = new Words.App();
 };
