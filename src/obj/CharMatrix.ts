@@ -4,9 +4,19 @@ module Words {
 		private width: number;
 		private height: number;
 
-		getElements(): String[][] {
-			return this.elements;
+		constructor(width: number, height: number) {
+			this.width = width;
+			this.height = height;
+			this.elements = [];
+			for (var i: number = 0; i < width; i++) {
+				var col: Array<String> = [];
+				for (var j: number = 0; j < height; j++) {
+					col.push(null);
+				}
+				this.elements.push(col);
+			}
 		}
+
 		getElement(x: number, y: number): String {
 			if (!this.belongTo(x, y)) { return; }
 			return this.elements[x][y];
@@ -57,6 +67,12 @@ module Words {
 		}
 		belongTo(x: number, y: number): boolean {
 			return x >= 0 && x < this.width && y >= 0 && x < this.height;
+		}
+		getElements(): String[][] {
+			return this.elements;
+		}
+		setElements(elements: String[][]) {
+			this.elements = elements;
 		}
     }
 }

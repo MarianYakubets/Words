@@ -22,6 +22,96 @@ window.onload = function () {
 };
 var Words;
 (function (Words) {
+    var CharMatrix = (function () {
+        function CharMatrix(width, height) {
+            this.width = width;
+            this.height = height;
+            this.elements = [];
+            for (var i = 0; i < width; i++) {
+                var col = [];
+                for (var j = 0; j < height; j++) {
+                    col.push(null);
+                }
+                this.elements.push(col);
+            }
+        }
+        CharMatrix.prototype.getElement = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            return this.elements[x][y];
+        };
+        CharMatrix.prototype.setElement = function (x, y, element) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            this.elements[x][y] = element;
+        };
+        CharMatrix.prototype.isEmpty = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            return this.elements[x][y] == null;
+        };
+        CharMatrix.prototype.getNeighboursElements = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            var els = [];
+            for (var cell in this.getNeighboursCells(x, y)) {
+                els.push(this.getElement(cell[0], cell[1]));
+            }
+            return els;
+        };
+        CharMatrix.prototype.getNeighboursCells = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            var ns = [];
+            this.addIfBelongs(x - 1, y, ns);
+            this.addIfBelongs(x + 1, y, ns);
+            this.addIfBelongs(x, y - 1, ns);
+            this.addIfBelongs(x, y + 1, ns);
+            return ns;
+        };
+        CharMatrix.prototype.addIfBelongs = function (x, y, neighbours) {
+            if (this.belongTo(x, y)) {
+                neighbours.push([x, y]);
+            }
+        };
+        CharMatrix.prototype.getSizeofNeighbours = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            return this.getNeighboursCells(x, y).length;
+        };
+        CharMatrix.prototype.getSizeofEmptyNeighbours = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return;
+            }
+            return 1;
+        };
+        CharMatrix.prototype.getNumberOfEmptyAreas = function () {
+            return 1;
+        };
+        CharMatrix.prototype.getEmptyAreas = function () {
+            return null;
+        };
+        CharMatrix.prototype.belongTo = function (x, y) {
+            return x >= 0 && x < this.width && y >= 0 && x < this.height;
+        };
+        CharMatrix.prototype.getElements = function () {
+            return this.elements;
+        };
+        CharMatrix.prototype.setElements = function (elements) {
+            this.elements = elements;
+        };
+        return CharMatrix;
+    })();
+    Words.CharMatrix = CharMatrix;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
     var Serializable = (function () {
         function Serializable() {
         }
