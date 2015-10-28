@@ -21,25 +21,29 @@ module Words {
 		}
 		getNeighboursElements(x: number, y: number): String[] {
 			if (!this.belongTo(x, y)) { return; }
-			return null;
+			var els: String[] = [];
+			for (var cell in this.getNeighboursCells(x, y)) {
+				els.push(this.getElement(cell[0], cell[1]));
+			}
+			return els;
 		}
 		getNeighboursCells(x: number, y: number): number[][] {
 			if (!this.belongTo(x, y)) { return; }
 			var ns: number[][] = [];
-			this.addIfNeighbour(x - 1, y, ns);
-			this.addIfNeighbour(x + 1, y, ns);
-			this.addIfNeighbour(x, y - 1, ns);
-			this.addIfNeighbour(x, y + 1, ns);
+			this.addIfBelongs(x - 1, y, ns);
+			this.addIfBelongs(x + 1, y, ns);
+			this.addIfBelongs(x, y - 1, ns);
+			this.addIfBelongs(x, y + 1, ns);
 			return ns;
 		}
-		addIfNeighbour(x: number, y: number, neighbours: number[][]) {
+		addIfBelongs(x: number, y: number, neighbours: number[][]) {
 			if (this.belongTo(x, y)) {
 				neighbours.push([x, y]);
 			}
 		}
 		getSizeofNeighbours(x: number, y: number): number {
 			if (!this.belongTo(x, y)) { return; }
-			return 1;
+			return this.getNeighboursCells(x, y).length;
 		}
 		getSizeofEmptyNeighbours(x: number, y: number): number {
 			if (!this.belongTo(x, y)) { return; }
