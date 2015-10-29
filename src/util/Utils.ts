@@ -28,5 +28,15 @@ module Words {
 			var heigth: number = size / width;
 			return [width, heigth];
 		}
+
+		public static sortBySize(elements: Array<{ length: number }>) {
+			return elements.sort((w1, w2) => w2.length - w1.length);
+		}
+
+		public static getRandArrayElement(elements: Array<any>): any {
+			var rand: number = Utils.getRandomNumber(elements.length - 1, 0);
+			return elements[rand];
+		}
+
 	}
 }

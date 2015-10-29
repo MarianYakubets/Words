@@ -24,6 +24,7 @@ var Words;
 (function (Words) {
     var CharMatrix = (function () {
         function CharMatrix(width, height) {
+            this.TAKEN = "taken";
             this.width = width;
             this.height = height;
             this.elements = [];
@@ -65,7 +66,7 @@ var Words;
         };
         CharMatrix.prototype.getNeighboursCells = function (x, y) {
             if (!this.belongTo(x, y)) {
-                return;
+                return [];
             }
             var ns = [];
             this.addIfBelongs(x - 1, y, ns);
@@ -74,8 +75,24 @@ var Words;
             this.addIfBelongs(x, y + 1, ns);
             return ns;
         };
+        CharMatrix.prototype.getEmptyNeighboursCells = function (x, y) {
+            if (!this.belongTo(x, y)) {
+                return [];
+            }
+            var ns = [];
+            this.addIfBelongsAndEmpty(x - 1, y, ns);
+            this.addIfBelongsAndEmpty(x + 1, y, ns);
+            this.addIfBelongsAndEmpty(x, y - 1, ns);
+            this.addIfBelongsAndEmpty(x, y + 1, ns);
+            return ns;
+        };
         CharMatrix.prototype.addIfBelongs = function (x, y, neighbours) {
             if (this.belongTo(x, y)) {
+                neighbours.push([x, y]);
+            }
+        };
+        CharMatrix.prototype.addIfBelongsAndEmpty = function (x, y, neighbours) {
+            if (this.belongTo(x, y) && this.isEmpty(x, y)) {
                 neighbours.push([x, y]);
             }
         };
@@ -95,10 +112,48 @@ var Words;
             return 1;
         };
         CharMatrix.prototype.getEmptyAreas = function () {
-            return null;
+            var areas = [];
+            var emptyCell = this.findEmpty();
+            while (emptyCell != null) {
+                areas.push(this.fillArea(emptyCell[0], emptyCell[1], []));
+                emptyCell = this.findEmpty();
+            }
+            this.сlearTaken();
+            return areas;
+        };
+        CharMatrix.prototype.fillArea = function (x, y, area) {
+            var _this = this;
+            var neighbours = this.getEmptyNeighboursCells(x, y);
+            neighbours.forEach(function (n) {
+                if (_this.isEmpty(n[0], n[1])) {
+                    area.push(n);
+                    _this.setElement(n[0], n[1], _this.TAKEN);
+                    _this.fillArea(n[0], n[1], area);
+                }
+            });
+            return area;
         };
         CharMatrix.prototype.belongTo = function (x, y) {
-            return x >= 0 && x < this.width && y >= 0 && x < this.height;
+            return x >= 0 && x < this.width && y >= 0 && y < this.height;
+        };
+        CharMatrix.prototype.сlearTaken = function () {
+            for (var i = 0; i < this.width; i++) {
+                for (var j = 0; j < this.height; j++) {
+                    if (this.elements[i][j] == this.TAKEN) {
+                        this.elements[i][j] = null;
+                    }
+                }
+            }
+        };
+        CharMatrix.prototype.findEmpty = function () {
+            for (var i = 0; i < this.width; i++) {
+                for (var j = 0; j < this.height; j++) {
+                    if (this.isEmpty(i, j)) {
+                        return [i, j];
+                    }
+                }
+            }
+            return null;
         };
         CharMatrix.prototype.getElements = function () {
             return this.elements;
@@ -156,7 +211,6 @@ var Words;
             var jObj = this.game.cache.getJSON('level');
             level.fillFromJSON(jObj);
             var matrix = Words.Generator.generateMatrixForWords(level.getWords());
-            alert(matrix);
         };
         return GameState;
     })(Phaser.State);
@@ -183,12 +237,46 @@ var Words;
         function Generator() {
         }
         Generator.generateMatrixForWords = function (words) {
+            Words.Utils.sortBySize(words);
             var size = Words.Utils.getWidthAndHeight(words);
             var matrix = new Words.CharMatrix(size[0], size[1]);
-            var x = Words.Utils.getRandomNumber(0, size[0] - 1);
-            var y = Words.Utils.getRandomNumber(0, size[1] - 1);
-            alert(x + ", " + y);
+            var areas;
+            var word;
+            areas = matrix.getEmptyAreas();
+            Words.Utils.sortBySize(areas);
+            for (var i = 0; i < words.length; i++) {
+                word = words[i];
+                Generator.fillAreaWithWord(areas[0], word, matrix);
+                areas = matrix.getEmptyAreas();
+                Words.Utils.sortBySize(areas);
+                while (!this.areasAreEnoughForWords(areas[0], words[i + 1], words[words.length - 1])) {
+                    Generator.fillAreaWithWord(areas[0], word, matrix);
+                    areas = matrix.getEmptyAreas();
+                    Words.Utils.sortBySize(areas);
+                }
+            }
+            alert(matrix.getElements());
             return matrix;
+        };
+        Generator.fillAreaWithWord = function (area, word, matrix) {
+            var start = Words.Utils.getRandArrayElement(area);
+            for (var i = 0; i < word.length; i++) {
+                matrix.setElement(start[0], start[1], word.charAt(i));
+                area = matrix.getEmptyNeighboursCells(start[0], start[1]);
+                start = Words.Utils.getRandArrayElement(area);
+            }
+        };
+        Generator.areasAreEnoughForWords = function (biggestArea, biggestWord, smallestWord) {
+            if (biggestWord == undefined) {
+                return true;
+            }
+            if (biggestArea.length < biggestWord.length) {
+                return false;
+            }
+            if (biggestArea.length == biggestWord.length) {
+                return true;
+            }
+            return biggestArea.length - biggestWord.length - smallestWord.length >= 0;
         };
         return Generator;
     })();
@@ -223,6 +311,13 @@ var Words;
             var width = Math.floor(Math.sqrt(size));
             var heigth = size / width;
             return [width, heigth];
+        };
+        Utils.sortBySize = function (elements) {
+            return elements.sort(function (w1, w2) { return w2.length - w1.length; });
+        };
+        Utils.getRandArrayElement = function (elements) {
+            var rand = Utils.getRandomNumber(elements.length - 1, 0);
+            return elements[rand];
         };
         return Utils;
     })();
