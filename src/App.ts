@@ -10,6 +10,7 @@ module Words {
 		}
 		preload() {
 			this.game.load.json('level', 'res/data/level1.json');
+			this.game.load.image('btn', 'res/img/blank-orange-button-md.png');
 		}
 
 		create() {

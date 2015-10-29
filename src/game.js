@@ -7,6 +7,7 @@ var Words;
         }
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
+            this.game.load.image('btn', 'res/img/blank-orange-button-md.png');
         };
         App.prototype.create = function () {
             this.game.state.add("MainMenuState", Words.MainMenuState, false);
@@ -207,6 +208,9 @@ var Words;
         GameState.prototype.preload = function () {
         };
         GameState.prototype.create = function () {
+            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
+        };
+        GameState.prototype.createLevel = function () {
             var level = new Words.Level();
             var jObj = this.game.cache.getJSON('level');
             level.fillFromJSON(jObj);
@@ -263,6 +267,9 @@ var Words;
             for (var i = 0; i < word.length; i++) {
                 matrix.setElement(start[0], start[1], word.charAt(i));
                 area = matrix.getEmptyNeighboursCells(start[0], start[1]);
+                if (area.length == 0) {
+                    i = word.length;
+                }
                 start = Words.Utils.getRandArrayElement(area);
             }
         };

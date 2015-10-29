@@ -3,4 +3,3 @@ Using the terminal, navigate to the location where your Visual Studio Code proje
 git remote add origin https://github.com/MarianYakubets/Words
 git push -u origin master
 
-

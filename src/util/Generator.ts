@@ -30,6 +30,9 @@ module Words {
 			for (var i: number = 0; i < word.length; i++) {
 				matrix.setElement(start[0], start[1], word.charAt(i));
 				area = matrix.getEmptyNeighboursCells(start[0], start[1]);
+				if (area.length == 0) {
+					i = word.length;
+				}
 				start = Utils.getRandArrayElement(area);
 			}
 		}
