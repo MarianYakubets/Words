@@ -38,5 +38,20 @@ module Words {
 			return elements[rand];
 		}
 
+		public static isMatrixFilled(matrix: CharMatrix, words: Array<string>): boolean {
+			var letters: number = Utils.getNumberOfLetters(words);
+			return (matrix.getWidth() * matrix.getHeight() - matrix.getNumberOfEmptyCells()) == letters;
+		}
+
+		public static getNumberOfLetters(words: Array<string>): number {
+			var nbr: number = 0;
+			var word: string;
+			for (var i: number = 0; i < words.length; i++) {
+				word = words[i];
+				nbr += word.length;
+			}
+			return nbr;
+		}
+
 	}
 }

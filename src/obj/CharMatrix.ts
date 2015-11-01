@@ -88,12 +88,28 @@ module Words {
 			return 1;
 		}
 
+		getNumberOfEmptyCells(): number {
+			var number: number = 0;
+			for (var i: number = 0; i < this.width; i++) {
+				for (var j: number = 0; j < this.height; j++) {
+					if (this.isEmpty(i, j)) {
+						number++;
+					}
+				}
+			}
+			return number;
+		}
+
 		getEmptyAreas(): number[][][] {
+			var max: number = this.height * this.width;
+			var attempts: number = 0;
 			var areas: number[][][] = [];
 			var emptyCell: number[] = this.findEmpty();
-			while (emptyCell != null) {
-				areas.push(this.fillArea(emptyCell[0], emptyCell[1], []))
+			while ((attempts < max) && emptyCell != null) {
+				console.log("getEmptyAreas: " + emptyCell);
+				areas.push(this.fillArea(emptyCell[0], emptyCell[1], []));
 				emptyCell = this.findEmpty();
+				attempts++;
 			}
 			this.сlearTaken();
 			return areas;
@@ -101,6 +117,7 @@ module Words {
 
 		fillArea(x: number, y: number, area: number[][]): number[][] {
 			var neighbours: number[][] = this.getEmptyNeighboursCells(x, y);
+			neighbours.push([x, y]);
 			neighbours.forEach(n => {
 				if (this.isEmpty(n[0], n[1])) {
 					area.push(n);
@@ -151,12 +168,12 @@ module Words {
 		setElements(elements: string[][]) {
 			this.elements = elements;
 		}
-		
-		getWidth(){
+
+		getWidth() {
 			return this.width;
 		}
-		
-		getHeight(){
+
+		getHeight() {
 			return this.height;
 		}
     }

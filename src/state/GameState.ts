@@ -1,6 +1,3 @@
-///<reference path="../obj/CharMatrix.ts"/>
-///<reference path="../obj/Level.ts"/>
-///<reference path="../util/Utils.ts"/>
 module Words {
     export class GameState extends Phaser.State {
         game: Phaser.Game;
@@ -17,7 +14,7 @@ module Words {
         create() {
             this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100,
                 'btn', this.createLevel, this, 2, 1, 0);
-
+            this.tiles = this.game.add.group();
         }
 
         update() {
@@ -25,9 +22,9 @@ module Words {
         }
 
         createTileMap() {
+            this.tiles.removeAll();
             var style: any = { font: "bold 32px Arial", fill: "#ff0", boundsAlignH: "center", boundsAlignV: "middle" };
             var step: number = 50;
-            this.tiles = this.game.add.group();
             var elements: string[][] = this.matrix.getElements();
             for (var i: number = 0; i < this.matrix.getWidth(); i++) {
                 for (var j: number = 0; j < this.matrix.getHeight(); j++) {

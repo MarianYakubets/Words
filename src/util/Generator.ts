@@ -1,33 +1,39 @@
 module Words {
 	export class Generator {
-		private static MAX_ATTEMPS: number = 10;
+		private static MAX_ATTEMPS: number = 100;
 
 		public static generateMatrixForWords(words: Array<string>, matrix: CharMatrix): CharMatrix {			
 			//Sort words
 			Utils.sortBySize(words);
 
-			var attemp = 0;
-			while (!Generator.generateAll(matrix, words) && attemp < Generator.MAX_ATTEMPS) {
+			var attemp: number = 0;
+			while ((!Generator.generateAll(matrix, words)
+				|| !Utils.isMatrixFilled(matrix, words))
+				&& attemp < Generator.MAX_ATTEMPS) {
 				attemp++;
 			}
 
-			alert(matrix.getElements());
 			return matrix;
 		}
 
 		private static generateAll(matrix: CharMatrix, words: Array<string>): boolean {
 			matrix.clear();
 			//Create Functions
-			var fill = this.fill(matrix, new Dictionary([]));
-			var revert = this.revert(matrix, new Dictionary([]));
+			var map: IDictionary = new Dictionary([]);
+			var fill = this.fill(matrix, map);
+			var revert = this.revert(matrix, map);
 			var attemp: number = 0;
 			var word: string;
 			for (var i: number = 0; i < words.length; i++) {
+				attemp = 0;
 				word = words[i];
 				while (!fill(word) && attemp < Generator.MAX_ATTEMPS) {
 					revert(word);
 					attemp++;
 				}
+			}
+			if (attemp == Generator.MAX_ATTEMPS) {
+				return false;
 			}
 
 			return true;
@@ -41,25 +47,27 @@ module Words {
 				var start: number[] = Utils.getRandArrayElement(area);
 				var coordinates: number[][] = [];
 				for (var i: number = 0; i < word.length; i++) {
-					start = Utils.getRandArrayElement(area);
-					if (start == undefined) {
+					if (area.length == 0) {
+						map.add(word, coordinates);
 						return false;
 					}
 					matrix.setElement(start[0], start[1], word.charAt(i));
 					coordinates.push(start);
 					area = matrix.getEmptyNeighboursCells(start[0], start[1]);
+					start = Utils.getRandArrayElement(area);
 				}
 				map.add(word, coordinates);
 				return true;
 			}
 		}
 
-		private static revert(matrix: CharMatrix, map: IDictionary) {
+		private static revert(matrix: CharMatrix, map: IDictionary): any {
 			var matrix: CharMatrix = matrix;
 			var map: IDictionary = map;
 			return function(word: string) {
-				for (var el in map.get(word)) {
-					matrix.setElement(el[0], el[1], null);
+				var elements = map.get(word);
+				for (var i: number = 0; i < elements.length; i++) {
+					matrix.setElement(elements[i][0], elements[i][1], null);
 				}
 				map.remove(word);
 			}
@@ -68,7 +76,7 @@ module Words {
 		private static areasAreEnoughForWords(matrix: CharMatrix, biggestWord: string,
 			smallestWord: string): boolean {
 			var biggestArea: number[][] = Generator.getBiggestEmptyArea(matrix);
-			if (biggestWord == undefined) {
+			if (typeof biggestWord === "undefined") {
 				return true;
 			}
 			if (biggestArea.length < biggestWord.length) {
@@ -77,7 +85,6 @@ module Words {
 			if (biggestArea.length == biggestWord.length) {
 				return true;
 			}
-			alert("some shit");
 			return biggestArea.length - biggestWord.length - smallestWord.length >= 0;
 		}
 
