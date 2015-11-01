@@ -4,13 +4,14 @@ module Words {
 		game: Phaser.Game;
 
 		constructor() {
-			this.game = new Phaser.Game(640, 480, Phaser.AUTO, 'content', {
+			this.game = new Phaser.Game(720, 1280, Phaser.AUTO, 'content', {
 				create: this.create, preload:
 				this.preload });
 		}
 		preload() {
 			this.game.load.json('level', 'res/data/level1.json');
-			this.game.load.image('btn', 'res/img/blank-orange-button-md.png');
+			this.game.load.image('btn', 'res/img/hex_128.png');
+			this.game.load.image('green', 'res/img/green.jpg');
 		}
 
 		create() {

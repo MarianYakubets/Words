@@ -2,12 +2,13 @@ var Words;
 (function (Words) {
     var App = (function () {
         function App() {
-            this.game = new Phaser.Game(640, 480, Phaser.AUTO, 'content', {
+            this.game = new Phaser.Game(720, 1280, Phaser.AUTO, 'content', {
                 create: this.create, preload: this.preload });
         }
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
-            this.game.load.image('btn', 'res/img/blank-orange-button-md.png');
+            this.game.load.image('btn', 'res/img/hex_128.png');
+            this.game.load.image('green', 'res/img/green.jpg');
         };
         App.prototype.create = function () {
             this.game.state.add("MainMenuState", Words.MainMenuState, false);
@@ -237,19 +238,21 @@ var Words;
         GameState.prototype.preload = function () {
         };
         GameState.prototype.create = function () {
-            this.game.add.button(this.game.world.centerX + 200, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
+            this.game.add.image(0, 0, 'green');
+            this.game.add.button(this.game.world.width - 50, this.game.world.height - 50, 'btn', this.createLevel, this, 2, 1, 0);
             this.tiles = this.game.add.group();
         };
         GameState.prototype.update = function () {
         };
         GameState.prototype.createTileMap = function () {
             this.tiles.removeAll();
-            var style = { font: "bold 32px Arial", fill: "#ff0", boundsAlignH: "center", boundsAlignV: "middle" };
-            var step = 50;
+            var style = { font: "bold 40px Arial", fill: "#ff0", boundsAlignH: "center", boundsAlignV: "middle" };
+            var step = 60;
+            var start = 150;
             var elements = this.matrix.getElements();
             for (var i = 0; i < this.matrix.getWidth(); i++) {
                 for (var j = 0; j < this.matrix.getHeight(); j++) {
-                    var tile = this.game.add.text(i * step, j * step, elements[i][j], style, this.tiles);
+                    var tile = this.game.add.text(start + i * step, start * 2 + j * step, elements[i][j], style, this.tiles);
                 }
             }
         };
