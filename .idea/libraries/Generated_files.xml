@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/src/obj/CharMatrix.js" />
+        <item url="file://$PROJECT_DIR$/src/obj/Level.js" />
+        <item url="file://$PROJECT_DIR$/src/state/GameState.js" />
+        <item url="file://$PROJECT_DIR$/src/util/Serializable.js" />
+        <item url="file://$PROJECT_DIR$/src/util/Utils.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/src/obj/CharMatrix.js" />
+      <root url="file://$PROJECT_DIR$/src/obj/Level.js" />
+      <root url="file://$PROJECT_DIR$/src/state/GameState.js" />
+      <root url="file://$PROJECT_DIR$/src/util/Serializable.js" />
+      <root url="file://$PROJECT_DIR$/src/util/Utils.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

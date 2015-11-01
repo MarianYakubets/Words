@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="tsDefinitionsPhaser" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/tsDefinitions" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/tsDefinitions" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
