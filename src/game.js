@@ -129,7 +129,7 @@ var Words;
             var areas = [];
             var emptyCell = this.findEmpty();
             while ((attempts < max) && emptyCell != null) {
-                console.log("getEmptyAreas: " + emptyCell);
+                console.log("getEmptyAreas: ");
                 areas.push(this.fillArea(emptyCell[0], emptyCell[1], []));
                 emptyCell = this.findEmpty();
                 attempts++;
@@ -140,7 +140,7 @@ var Words;
         CharMatrix.prototype.fillArea = function (x, y, area) {
             var _this = this;
             var neighbours = this.getEmptyNeighboursCells(x, y);
-            neighbours.push([x, y]);
+            neighbours.unshift([x, y]);
             neighbours.forEach(function (n) {
                 if (_this.isEmpty(n[0], n[1])) {
                     area.push(n);
@@ -237,7 +237,7 @@ var Words;
         GameState.prototype.preload = function () {
         };
         GameState.prototype.create = function () {
-            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
+            this.game.add.button(this.game.world.centerX + 200, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
             this.tiles = this.game.add.group();
         };
         GameState.prototype.update = function () {

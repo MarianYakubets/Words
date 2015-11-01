@@ -106,7 +106,7 @@ module Words {
 			var areas: number[][][] = [];
 			var emptyCell: number[] = this.findEmpty();
 			while ((attempts < max) && emptyCell != null) {
-				console.log("getEmptyAreas: " + emptyCell);
+				console.log("getEmptyAreas: ");
 				areas.push(this.fillArea(emptyCell[0], emptyCell[1], []));
 				emptyCell = this.findEmpty();
 				attempts++;
@@ -117,7 +117,7 @@ module Words {
 
 		fillArea(x: number, y: number, area: number[][]): number[][] {
 			var neighbours: number[][] = this.getEmptyNeighboursCells(x, y);
-			neighbours.push([x, y]);
+			neighbours.unshift([x, y]);
 			neighbours.forEach(n => {
 				if (this.isEmpty(n[0], n[1])) {
 					area.push(n);

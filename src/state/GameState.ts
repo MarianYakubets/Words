@@ -12,7 +12,7 @@ module Words {
         }
 
         create() {
-            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100,
+            this.game.add.button(this.game.world.centerX + 200, this.game.world.centerY - 100,
                 'btn', this.createLevel, this, 2, 1, 0);
             this.tiles = this.game.add.group();
         }
