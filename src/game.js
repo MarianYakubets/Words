@@ -156,11 +156,24 @@ var Words;
             }
             return null;
         };
+        CharMatrix.prototype.clear = function () {
+            for (var i = 0; i < this.width; i++) {
+                for (var j = 0; j < this.height; j++) {
+                    this.elements[i][j] = null;
+                }
+            }
+        };
         CharMatrix.prototype.getElements = function () {
             return this.elements;
         };
         CharMatrix.prototype.setElements = function (elements) {
             this.elements = elements;
+        };
+        CharMatrix.prototype.getWidth = function () {
+            return this.width;
+        };
+        CharMatrix.prototype.getHeight = function () {
+            return this.height;
         };
         return CharMatrix;
     })();
@@ -197,97 +210,6 @@ var Words;
         return Level;
     })(Words.Serializable);
     Words.Level = Level;
-})(Words || (Words = {}));
-var Words;
-(function (Words) {
-    var GameState = (function (_super) {
-        __extends(GameState, _super);
-        function GameState() {
-            _super.call(this);
-        }
-        GameState.prototype.preload = function () {
-        };
-        GameState.prototype.create = function () {
-            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
-        };
-        GameState.prototype.createLevel = function () {
-            var level = new Words.Level();
-            var jObj = this.game.cache.getJSON('level');
-            level.fillFromJSON(jObj);
-            var matrix = Words.Generator.generateMatrixForWords(level.getWords());
-        };
-        return GameState;
-    })(Phaser.State);
-    Words.GameState = GameState;
-})(Words || (Words = {}));
-var Words;
-(function (Words) {
-    var MainMenuState = (function (_super) {
-        __extends(MainMenuState, _super);
-        function MainMenuState() {
-            _super.call(this);
-        }
-        MainMenuState.prototype.preload = function () {
-        };
-        MainMenuState.prototype.create = function () {
-        };
-        return MainMenuState;
-    })(Phaser.State);
-    Words.MainMenuState = MainMenuState;
-})(Words || (Words = {}));
-var Words;
-(function (Words) {
-    var Generator = (function () {
-        function Generator() {
-        }
-        Generator.generateMatrixForWords = function (words) {
-            Words.Utils.sortBySize(words);
-            var size = Words.Utils.getWidthAndHeight(words);
-            var matrix = new Words.CharMatrix(size[0], size[1]);
-            var areas;
-            var word;
-            areas = matrix.getEmptyAreas();
-            Words.Utils.sortBySize(areas);
-            for (var i = 0; i < words.length; i++) {
-                word = words[i];
-                Generator.fillAreaWithWord(areas[0], word, matrix);
-                areas = matrix.getEmptyAreas();
-                Words.Utils.sortBySize(areas);
-                while (!this.areasAreEnoughForWords(areas[0], words[i + 1], words[words.length - 1])) {
-                    Generator.fillAreaWithWord(areas[0], word, matrix);
-                    areas = matrix.getEmptyAreas();
-                    Words.Utils.sortBySize(areas);
-                }
-            }
-            alert(matrix.getElements());
-            return matrix;
-        };
-        Generator.fillAreaWithWord = function (area, word, matrix) {
-            var start = Words.Utils.getRandArrayElement(area);
-            for (var i = 0; i < word.length; i++) {
-                matrix.setElement(start[0], start[1], word.charAt(i));
-                area = matrix.getEmptyNeighboursCells(start[0], start[1]);
-                if (area.length == 0) {
-                    i = word.length;
-                }
-                start = Words.Utils.getRandArrayElement(area);
-            }
-        };
-        Generator.areasAreEnoughForWords = function (biggestArea, biggestWord, smallestWord) {
-            if (biggestWord == undefined) {
-                return true;
-            }
-            if (biggestArea.length < biggestWord.length) {
-                return false;
-            }
-            if (biggestArea.length == biggestWord.length) {
-                return true;
-            }
-            return biggestArea.length - biggestWord.length - smallestWord.length >= 0;
-        };
-        return Generator;
-    })();
-    Words.Generator = Generator;
 })(Words || (Words = {}));
 var Words;
 (function (Words) {
@@ -329,4 +251,235 @@ var Words;
         return Utils;
     })();
     Words.Utils = Utils;
+})(Words || (Words = {}));
+///<reference path="../obj/CharMatrix.ts"/>
+///<reference path="../obj/Level.ts"/>
+///<reference path="../util/Utils.ts"/>
+var Words;
+(function (Words) {
+    var GameState = (function (_super) {
+        __extends(GameState, _super);
+        function GameState() {
+            _super.call(this);
+        }
+        GameState.prototype.preload = function () {
+        };
+        GameState.prototype.create = function () {
+            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
+        };
+        GameState.prototype.update = function () {
+        };
+        GameState.prototype.createTileMap = function () {
+            var style = { font: "bold 32px Arial", fill: "#ff0", boundsAlignH: "center", boundsAlignV: "middle" };
+            var step = 50;
+            this.tiles = this.game.add.group();
+            var elements = this.matrix.getElements();
+            for (var i = 0; i < this.matrix.getWidth(); i++) {
+                for (var j = 0; j < this.matrix.getHeight(); j++) {
+                    var tile = this.game.add.text(i * step, j * step, elements[i][j], style, this.tiles);
+                }
+            }
+        };
+        GameState.prototype.createLevel = function () {
+            var level = new Words.Level();
+            var jObj = this.game.cache.getJSON('level');
+            level.fillFromJSON(jObj);
+            var done = false;
+            //Create Matrix
+            var size = Words.Utils.getWidthAndHeight(level.getWords());
+            this.matrix = new Words.CharMatrix(size[0], size[1]);
+            while (!done) {
+                try {
+                    Words.Generator.generateMatrixForWords(level.getWords(), this.matrix);
+                    done = true;
+                }
+                catch (error) {
+                    alert("attemp fail");
+                }
+            }
+            this.createTileMap();
+        };
+        return GameState;
+    })(Phaser.State);
+    Words.GameState = GameState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var GenerateState = (function (_super) {
+        __extends(GenerateState, _super);
+        function GenerateState() {
+            _super.call(this);
+        }
+        GenerateState.prototype.preload = function () {
+        };
+        GenerateState.prototype.create = function () {
+            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100, 'btn', this.createLevel, this, 2, 1, 0);
+            this.tiles = this.game.add.group();
+        };
+        GenerateState.prototype.update = function () {
+        };
+        GenerateState.prototype.createLevel = function () {
+            var level = new Words.Level();
+            var jObj = this.game.cache.getJSON('level');
+            level.fillFromJSON(jObj);
+            var matrix;
+            var done = false;
+            while (!done) {
+                try {
+                    matrix = Words.Generator.generateMatrixForWords(level.getWords(), matrix);
+                    done = true;
+                }
+                catch (error) {
+                    alert("attemp fail");
+                }
+            }
+        };
+        return GenerateState;
+    })(Phaser.State);
+    Words.GenerateState = GenerateState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var MainMenuState = (function (_super) {
+        __extends(MainMenuState, _super);
+        function MainMenuState() {
+            _super.call(this);
+        }
+        MainMenuState.prototype.preload = function () {
+        };
+        MainMenuState.prototype.create = function () {
+        };
+        return MainMenuState;
+    })(Phaser.State);
+    Words.MainMenuState = MainMenuState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var Dictionary = (function () {
+        function Dictionary(init) {
+            this._keys = [];
+            this._values = [];
+            for (var x = 0; x < init.length; x++) {
+                this[init[x].key] = init[x].value;
+                this._keys.push(init[x].key);
+                this._values.push(init[x].value);
+            }
+        }
+        Dictionary.prototype.add = function (key, value) {
+            this[key] = value;
+            this._keys.push(key);
+            this._values.push(value);
+        };
+        Dictionary.prototype.remove = function (key) {
+            var index = this._keys.indexOf(key, 0);
+            this._keys.splice(index, 1);
+            this._values.splice(index, 1);
+            delete this[key];
+        };
+        Dictionary.prototype.get = function (key) {
+            return this[key];
+        };
+        Dictionary.prototype.keys = function () {
+            return this._keys;
+        };
+        Dictionary.prototype.values = function () {
+            return this._values;
+        };
+        Dictionary.prototype.containsKey = function (key) {
+            if (typeof this[key] === "undefined") {
+                return false;
+            }
+            return true;
+        };
+        Dictionary.prototype.toLookup = function () {
+            return this;
+        };
+        return Dictionary;
+    })();
+    Words.Dictionary = Dictionary;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var Generator = (function () {
+        function Generator() {
+        }
+        Generator.generateMatrixForWords = function (words, matrix) {
+            //Sort words
+            Words.Utils.sortBySize(words);
+            var attemp = 0;
+            while (!Generator.generateAll(matrix, words) && attemp < Generator.MAX_ATTEMPS) {
+                attemp++;
+            }
+            alert(matrix.getElements());
+            return matrix;
+        };
+        Generator.generateAll = function (matrix, words) {
+            matrix.clear();
+            //Create Functions
+            var fill = this.fill(matrix, new Words.Dictionary([]));
+            var revert = this.revert(matrix, new Words.Dictionary([]));
+            var attemp = 0;
+            var word;
+            for (var i = 0; i < words.length; i++) {
+                word = words[i];
+                while (!fill(word) && attemp < Generator.MAX_ATTEMPS) {
+                    revert(word);
+                    attemp++;
+                }
+            }
+            return true;
+        };
+        Generator.fill = function (matrix, map) {
+            var matrix = matrix;
+            var map = map;
+            return function (word) {
+                var area = Generator.getBiggestEmptyArea(matrix);
+                var start = Words.Utils.getRandArrayElement(area);
+                var coordinates = [];
+                for (var i = 0; i < word.length; i++) {
+                    start = Words.Utils.getRandArrayElement(area);
+                    if (start == undefined) {
+                        return false;
+                    }
+                    matrix.setElement(start[0], start[1], word.charAt(i));
+                    coordinates.push(start);
+                    area = matrix.getEmptyNeighboursCells(start[0], start[1]);
+                }
+                map.add(word, coordinates);
+                return true;
+            };
+        };
+        Generator.revert = function (matrix, map) {
+            var matrix = matrix;
+            var map = map;
+            return function (word) {
+                for (var el in map.get(word)) {
+                    matrix.setElement(el[0], el[1], null);
+                }
+                map.remove(word);
+            };
+        };
+        Generator.areasAreEnoughForWords = function (matrix, biggestWord, smallestWord) {
+            var biggestArea = Generator.getBiggestEmptyArea(matrix);
+            if (biggestWord == undefined) {
+                return true;
+            }
+            if (biggestArea.length < biggestWord.length) {
+                return false;
+            }
+            if (biggestArea.length == biggestWord.length) {
+                return true;
+            }
+            alert("some shit");
+            return biggestArea.length - biggestWord.length - smallestWord.length >= 0;
+        };
+        Generator.getBiggestEmptyArea = function (matrix) {
+            var areas = matrix.getEmptyAreas();
+            Words.Utils.sortBySize(areas);
+            return areas[0];
+        };
+        Generator.MAX_ATTEMPS = 10;
+        return Generator;
+    })();
+    Words.Generator = Generator;
 })(Words || (Words = {}));

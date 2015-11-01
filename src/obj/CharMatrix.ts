@@ -1,16 +1,16 @@
 module Words {
     export class CharMatrix {
-        private elements: String[][];
+        private elements: string[][];
 		private width: number;
 		private height: number;
-		private TAKEN: String = "taken";
+		private TAKEN: string = "taken";
 
 		constructor(width: number, height: number) {
 			this.width = width;
 			this.height = height;
 			this.elements = [];
 			for (var i: number = 0; i < width; i++) {
-				var col: Array<String> = [];
+				var col: Array<string> = [];
 				for (var j: number = 0; j < height; j++) {
 					col.push(null);
 				}
@@ -18,12 +18,12 @@ module Words {
 			}
 		}
 
-		getElement(x: number, y: number): String {
+		getElement(x: number, y: number): string {
 			if (!this.belongTo(x, y)) { return; }
 			return this.elements[x][y];
 		}
 
-		setElement(x: number, y: number, element: String) {
+		setElement(x: number, y: number, element: string) {
 			if (!this.belongTo(x, y)) { return; }
 			this.elements[x][y] = element;
 		}
@@ -33,9 +33,9 @@ module Words {
 			return this.elements[x][y] == null;
 		}
 
-		getNeighboursElements(x: number, y: number): String[] {
+		getNeighboursElements(x: number, y: number): string[] {
 			if (!this.belongTo(x, y)) { return; }
-			var els: String[] = [];
+			var els: string[] = [];
 			for (var cell in this.getNeighboursCells(x, y)) {
 				els.push(this.getElement(cell[0], cell[1]));
 			}
@@ -136,12 +136,28 @@ module Words {
 			return null;
 		}
 
-		getElements(): String[][] {
+		clear() {
+			for (var i: number = 0; i < this.width; i++) {
+				for (var j: number = 0; j < this.height; j++) {
+					this.elements[i][j] = null;
+				}
+			}
+		}
+
+		getElements(): string[][] {
 			return this.elements;
 		}
 
-		setElements(elements: String[][]) {
+		setElements(elements: string[][]) {
 			this.elements = elements;
+		}
+		
+		getWidth(){
+			return this.width;
+		}
+		
+		getHeight(){
+			return this.height;
 		}
     }
 }

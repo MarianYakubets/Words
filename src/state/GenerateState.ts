@@ -15,10 +15,8 @@ module Words {
             this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY - 100,
                 'btn', this.createLevel, this, 2, 1, 0);
             this.tiles = this.game.add.group();
-            this.tiles = this.game.add.group();
-            this.tiles = this.game.add.group();
         }
-        
+
         update(){
                 
         }
@@ -31,7 +29,7 @@ module Words {
             var done: boolean = false;
             while (!done) {
                 try {
-                    matrix = Generator.generateMatrixForWords(level.getWords());
+                    matrix = Generator.generateMatrixForWords(level.getWords(), matrix);
                     done = true;
                 } catch (error) {
                     alert("attemp fail");

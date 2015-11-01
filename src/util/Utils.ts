@@ -19,7 +19,7 @@ module Words {
 			}
 		}
 
-		public static getWidthAndHeight(words: Array<String>): number[] {
+		public static getWidthAndHeight(words: Array<string>): number[] {
 			var size: number = 0;
 			for (var i: number = 0; i < words.length; i++) {
 				size = size + words[i].length;
