@@ -49,6 +49,7 @@ module Words {
 				for (var i: number = 0; i < word.length; i++) {
 					if (area.length == 0) {
 						map.add(word, coordinates);
+						//remember bad positions to avoid them in the future
 						return false;
 					}
 					matrix.setElement(start[0], start[1], word.charAt(i));

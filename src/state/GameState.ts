@@ -3,6 +3,7 @@ module Words {
         game: Phaser.Game;
         tiles: Phaser.Group;
         matrix: CharMatrix;
+        map:Phaser.Tilemap;
 
         constructor() {
             super();
@@ -16,6 +17,10 @@ module Words {
             this.game.add.button(this.game.world.width - 50, this.game.world.height - 50,
                 'btn', this.createLevel, this, 2, 1, 0);
             this.tiles = this.game.add.group();
+            
+            this.map = this.game.add.tilemap();
+            this.map.addTileSetImage("letters");
+            
         }
 
         update() {
