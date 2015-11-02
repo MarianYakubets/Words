@@ -8,6 +8,7 @@ var Words;
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
             this.game.load.image('btn', 'res/img/hex_128.png');
+            this.game.load.image('letters', 'res/img/letter_64.png');
             this.game.load.image('green', 'res/img/green.jpg');
         };
         App.prototype.create = function () {
@@ -241,6 +242,9 @@ var Words;
             this.game.add.image(0, 0, 'green');
             this.game.add.button(this.game.world.width - 50, this.game.world.height - 50, 'btn', this.createLevel, this, 2, 1, 0);
             this.tiles = this.game.add.group();
+            this.map = this.game.add.tilemap();
+            this.map.addTilesetImage("letters", "letters", 64, 64);
+            this.layer = this.map.create('layer', 10, 10, 64, 64);
         };
         GameState.prototype.update = function () {
         };
@@ -253,6 +257,8 @@ var Words;
             for (var i = 0; i < this.matrix.getWidth(); i++) {
                 for (var j = 0; j < this.matrix.getHeight(); j++) {
                     var tile = this.game.add.text(start + i * step, start * 2 + j * step, elements[i][j], style, this.tiles);
+                    var index = Words.Letter[elements[i][j].toUpperCase()];
+                    this.map.putTile(index, i, j, this.layer);
                 }
             }
         };
@@ -421,6 +427,7 @@ var Words;
                 for (var i = 0; i < word.length; i++) {
                     if (area.length == 0) {
                         map.add(word, coordinates);
+                        //remember bad positions to avoid them in the future
                         return false;
                     }
                     matrix.setElement(start[0], start[1], word.charAt(i));
@@ -465,6 +472,38 @@ var Words;
         return Generator;
     })();
     Words.Generator = Generator;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    (function (Letter) {
+        Letter[Letter["A"] = 0] = "A";
+        Letter[Letter["B"] = 1] = "B";
+        Letter[Letter["C"] = 2] = "C";
+        Letter[Letter["D"] = 3] = "D";
+        Letter[Letter["E"] = 4] = "E";
+        Letter[Letter["F"] = 5] = "F";
+        Letter[Letter["G"] = 6] = "G";
+        Letter[Letter["H"] = 7] = "H";
+        Letter[Letter["I"] = 8] = "I";
+        Letter[Letter["J"] = 9] = "J";
+        Letter[Letter["K"] = 10] = "K";
+        Letter[Letter["L"] = 11] = "L";
+        Letter[Letter["M"] = 12] = "M";
+        Letter[Letter["N"] = 13] = "N";
+        Letter[Letter["O"] = 14] = "O";
+        Letter[Letter["P"] = 15] = "P";
+        Letter[Letter["Q"] = 16] = "Q";
+        Letter[Letter["R"] = 17] = "R";
+        Letter[Letter["S"] = 18] = "S";
+        Letter[Letter["T"] = 19] = "T";
+        Letter[Letter["U"] = 20] = "U";
+        Letter[Letter["V"] = 21] = "V";
+        Letter[Letter["W"] = 22] = "W";
+        Letter[Letter["X"] = 23] = "X";
+        Letter[Letter["Y"] = 24] = "Y";
+        Letter[Letter["Z"] = 25] = "Z";
+    })(Words.Letter || (Words.Letter = {}));
+    var Letter = Words.Letter;
 })(Words || (Words = {}));
 var Words;
 (function (Words) {
