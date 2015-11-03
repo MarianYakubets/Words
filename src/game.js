@@ -250,7 +250,7 @@ var Words;
             //map for tiles
             this.map = this.game.add.tilemap();
             this.map.addTilesetImage("letters", "letters", 64, 64);
-            this.layer = this.map.create('layer', 10, 10, 64, 64);
+            this.layer = this.map.create('layer', 10, 10, 128, 128);
         };
         GameState.prototype.update = function () {
         };
