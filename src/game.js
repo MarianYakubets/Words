@@ -7,7 +7,7 @@ var Words;
         }
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
-            this.game.load.image('btn', 'res/img/hex_128.png');
+            this.game.load.image('btn', 'res/img/yellow_btn.png');
             this.game.load.image('letters', 'res/img/letter_64.png');
             this.game.load.image('green', 'res/img/green.jpg');
         };
@@ -239,9 +239,15 @@ var Words;
         GameState.prototype.preload = function () {
         };
         GameState.prototype.create = function () {
+            //background
             this.game.add.image(0, 0, 'green');
-            this.game.add.button(this.game.world.width - 50, this.game.world.height - 50, 'btn', this.createLevel, this, 2, 1, 0);
-            this.tiles = this.game.add.group();
+            //generate buttons
+            var btn = this.game.add.button(this.game.world.width / 2 - 64, this.game.world.height - 64, 'btn', this.createLevel, this, 2, 1, 0);
+            var style = { font: "20px Arial", fill: "#FFFFFF", align: "center" };
+            var text = new Phaser.Text(this.game, btn.width / 2, btn.height / 2, "GENERATE", style);
+            text.anchor.set(0.5);
+            btn.addChild(text);
+            //map for tiles
             this.map = this.game.add.tilemap();
             this.map.addTilesetImage("letters", "letters", 64, 64);
             this.layer = this.map.create('layer', 10, 10, 64, 64);
@@ -249,14 +255,11 @@ var Words;
         GameState.prototype.update = function () {
         };
         GameState.prototype.createTileMap = function () {
-            this.tiles.removeAll();
-            var style = { font: "bold 40px Arial", fill: "#ff0", boundsAlignH: "center", boundsAlignV: "middle" };
             var step = 60;
             var start = 150;
             var elements = this.matrix.getElements();
             for (var i = 0; i < this.matrix.getWidth(); i++) {
                 for (var j = 0; j < this.matrix.getHeight(); j++) {
-                    var tile = this.game.add.text(start + i * step, start * 2 + j * step, elements[i][j], style, this.tiles);
                     var index = Words.Letter[elements[i][j].toUpperCase()];
                     this.map.putTile(index, i, j, this.layer);
                 }

@@ -10,7 +10,7 @@ module Words {
 		}
 		preload() {
 			this.game.load.json('level', 'res/data/level1.json');
-			this.game.load.image('btn', 'res/img/hex_128.png');
+			this.game.load.image('btn', 'res/img/yellow_btn.png');
 			this.game.load.image('letters', 'res/img/letter_64.png');
 			this.game.load.image('green', 'res/img/green.jpg');
 		}

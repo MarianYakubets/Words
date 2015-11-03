@@ -1,7 +1,6 @@
 module Words {
     export class GameState extends Phaser.State {
         game: Phaser.Game;
-        tiles: Phaser.Group;
         matrix: CharMatrix;
         map: Phaser.Tilemap;
         layer: Phaser.TilemapLayer
@@ -14,16 +13,19 @@ module Words {
         }
 
         create() {
+            //background
             this.game.add.image(0, 0, 'green');
-            this.game.add.button(this.game.world.width - 50, this.game.world.height - 50,
+            //generate buttons
+            var btn: Phaser.Button = this.game.add.button(this.game.world.width / 2 - 64, this.game.world.height - 64,
                 'btn', this.createLevel, this, 2, 1, 0);
-            this.tiles = this.game.add.group();
-
+            var style: Phaser.PhaserTextStyle = { font: "20px Arial", fill: "#FFFFFF", align: "center" };
+            var text: Phaser.Text = new Phaser.Text(this.game, btn.width / 2, btn.height / 2, "GENERATE", style);
+            text.anchor.set(0.5);
+            btn.addChild(text);
+            //map for tiles
             this.map = this.game.add.tilemap();
             this.map.addTilesetImage("letters", "letters", 64, 64);
-
             this.layer = this.map.create('layer', 10, 10, 64, 64);
-
         }
 
         update() {
@@ -31,8 +33,6 @@ module Words {
         }
 
         createTileMap() {
-            this.tiles.removeAll();
-            var style: any = { font: "bold 40px Arial", fill: "#ff0", boundsAlignH: "center", boundsAlignV: "middle" };
             var step: number = 60;
             var start: number = 150;
             var elements: string[][] = this.matrix.getElements();
