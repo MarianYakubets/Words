@@ -8,7 +8,7 @@ var Words;
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
             this.game.load.image('btn', 'res/img/yellow_btn.png');
-            this.game.load.image('letters', 'res/img/letter_64.png');
+            this.game.load.spritesheet('letter', 'res/img/letter_64.png', 64, 64);
             this.game.load.image('green', 'res/img/green.jpg');
         };
         App.prototype.create = function () {
@@ -23,6 +23,33 @@ var Words;
 window.onload = function () {
     var game = new Words.App();
 };
+var Words;
+(function (Words) {
+    var Tilemap = (function () {
+        function Tilemap(game) {
+            this.game = game;
+            this.group = this.game.add.group();
+        }
+        Tilemap.prototype.draw = function (letters) {
+            var step = 64;
+            this.letters = letters;
+            var elements = letters.getElements();
+            for (var i = 0; i < letters.getWidth(); i++) {
+                for (var j = 0; j < letters.getHeight(); j++) {
+                    var index = Words.Letter[elements[i][j].toUpperCase()];
+                    this.group.create(i * step, j * step, 'letter', index);
+                }
+            }
+            this.group.scale.set(3, 3);
+            this.group.x = this.game.width / 2 - this.group.width / 2;
+            this.group.y = this.game.height / 2 - this.group.height / 2;
+        };
+        Tilemap.prototype.clear = function () {
+        };
+        return Tilemap;
+    })();
+    Words.Tilemap = Tilemap;
+})(Words || (Words = {}));
 var Words;
 (function (Words) {
     var CharMatrix = (function () {
@@ -248,22 +275,25 @@ var Words;
             text.anchor.set(0.5);
             btn.addChild(text);
             //map for tiles
-            this.map = this.game.add.tilemap();
-            this.map.addTilesetImage("letters", "letters", 64, 64);
-            this.layer = this.map.create('layer', 10, 10, 128, 128);
+            this.tilemap = new Words.Tilemap(this.game);
+            // this.map = this.game.add.tilemap();
+            // this.map.addTilesetImage("letters", "letters", 64, 64);
+            // this.layer = this.map.create('layer', 10, 10, 64, 64);
+            var rect = new Phaser.Rectangle(400, 400, 40, 40);
         };
         GameState.prototype.update = function () {
         };
         GameState.prototype.createTileMap = function () {
-            var step = 60;
-            var start = 150;
-            var elements = this.matrix.getElements();
-            for (var i = 0; i < this.matrix.getWidth(); i++) {
-                for (var j = 0; j < this.matrix.getHeight(); j++) {
-                    var index = Words.Letter[elements[i][j].toUpperCase()];
-                    this.map.putTile(index, i, j, this.layer);
-                }
-            }
+            // var step: number = 60;
+            // var start: number = 150;
+            // var elements: string[][] = this.matrix.getElements();
+            // for (var i: number = 0; i < this.matrix.getWidth(); i++) {
+            //     for (var j: number = 0; j < this.matrix.getHeight(); j++) {
+            //         var index: number = Letter[elements[i][j].toUpperCase()];
+            //         this.map.putTile(index, i, j, this.layer);
+            //     }
+            // }
+            this.tilemap.draw(this.matrix);
         };
         GameState.prototype.createLevel = function () {
             var level = new Words.Level();

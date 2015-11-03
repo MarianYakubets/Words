@@ -2,8 +2,9 @@ module Words {
     export class GameState extends Phaser.State {
         game: Phaser.Game;
         matrix: CharMatrix;
-        map: Phaser.Tilemap;
-        layer: Phaser.TilemapLayer
+        //map: Phaser.Tilemap;
+        //layer: Phaser.TilemapLayer;
+        tilemap: Words.Tilemap;
 
         constructor() {
             super();
@@ -23,9 +24,12 @@ module Words {
             text.anchor.set(0.5);
             btn.addChild(text);
             //map for tiles
-            this.map = this.game.add.tilemap();
-            this.map.addTilesetImage("letters", "letters", 64, 64);
-            this.layer = this.map.create('layer', 10, 10, 128, 128);
+            this.tilemap = new Words.Tilemap(this.game);
+            // this.map = this.game.add.tilemap();
+            // this.map.addTilesetImage("letters", "letters", 64, 64);
+            // this.layer = this.map.create('layer', 10, 10, 64, 64);
+
+            var rect: Phaser.Rectangle = new Phaser.Rectangle(400, 400, 40, 40);
         }
 
         update() {
@@ -33,17 +37,18 @@ module Words {
         }
 
         createTileMap() {
-            var step: number = 60;
-            var start: number = 150;
-            var elements: string[][] = this.matrix.getElements();
-            for (var i: number = 0; i < this.matrix.getWidth(); i++) {
-                for (var j: number = 0; j < this.matrix.getHeight(); j++) {
-                    var index: number = Letter[elements[i][j].toUpperCase()];
+            // var step: number = 60;
+            // var start: number = 150;
+            // var elements: string[][] = this.matrix.getElements();
+            // for (var i: number = 0; i < this.matrix.getWidth(); i++) {
+            //     for (var j: number = 0; j < this.matrix.getHeight(); j++) {
+            //         var index: number = Letter[elements[i][j].toUpperCase()];
 
-                    this.map.putTile(index, i, j, this.layer);
+            //         this.map.putTile(index, i, j, this.layer);
 
-                }
-            }
+            //     }
+            // }
+            this.tilemap.draw(this.matrix);
         }
 
         createLevel() {
