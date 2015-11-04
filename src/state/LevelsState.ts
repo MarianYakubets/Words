@@ -14,6 +14,7 @@ module Words {
         create() {
             //background
             this.game.add.image(0, 0, 'green');
+            var group:Phaser.Group = this.game.add.group();
             
         }
 
