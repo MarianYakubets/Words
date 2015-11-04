@@ -7,13 +7,13 @@ var Words;
         }
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
-            this.game.load.image('btn', 'res/img/yellow_btn.png');
+            this.game.load.image('btn', 'res/img/button.png');
             this.game.load.spritesheet('letter', 'res/img/letter_64.png', 64, 64);
             this.game.load.image('green', 'res/img/green.jpg');
         };
         App.prototype.create = function () {
-            this.game.state.add("MainMenuState", Words.MainMenuState, false);
-            this.game.state.add("GameState", Words.GameState, true);
+            this.game.state.add("MainMenuState", Words.MainMenuState, true);
+            this.game.state.add("GameState", Words.GameState, false);
             this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         };
         return App;
@@ -23,6 +23,26 @@ var Words;
 window.onload = function () {
     var game = new Words.App();
 };
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Words;
+(function (Words) {
+    var TextBtn = (function (_super) {
+        __extends(TextBtn, _super);
+        function TextBtn(game, x, y, name, onClickCallback, context) {
+            _super.call(this, game, x, y, 'btn', onClickCallback, context, 2, 1, 0);
+            var style = { font: "20px Arial", fill: "#FFFFFF", align: "center" };
+            var text = new Phaser.Text(this.game, this.width / 2, this.height / 2, name, style);
+            text.anchor.set(0.5);
+            this.addChild(text);
+        }
+        return TextBtn;
+    })(Phaser.Button);
+    Words.TextBtn = TextBtn;
+})(Words || (Words = {}));
 var Words;
 (function (Words) {
     var Tilemap = (function () {
@@ -238,11 +258,6 @@ var Words;
     })();
     Words.Serializable = Serializable;
 })(Words || (Words = {}));
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 ///<reference path='../util/Serializable' />
 var Words;
 (function (Words) {
@@ -269,11 +284,8 @@ var Words;
             //background
             this.game.add.image(0, 0, 'green');
             //generate buttons
-            var btn = this.game.add.button(this.game.world.width / 2 - 64, this.game.world.height - 64, 'btn', this.createLevel, this, 2, 1, 0);
-            var style = { font: "20px Arial", fill: "#FFFFFF", align: "center" };
-            var text = new Phaser.Text(this.game, btn.width / 2, btn.height / 2, "GENERATE", style);
-            text.anchor.set(0.5);
-            btn.addChild(text);
+            var btn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height - 110, "GENERATE", this.createLevel, this);
+            this.game.add.existing(btn);
             //map for tiles
             this.tilemap = new Words.Tilemap(this.game);
             // this.map = this.game.add.tilemap();
@@ -284,15 +296,6 @@ var Words;
         GameState.prototype.update = function () {
         };
         GameState.prototype.createTileMap = function () {
-            // var step: number = 60;
-            // var start: number = 150;
-            // var elements: string[][] = this.matrix.getElements();
-            // for (var i: number = 0; i < this.matrix.getWidth(); i++) {
-            //     for (var j: number = 0; j < this.matrix.getHeight(); j++) {
-            //         var index: number = Letter[elements[i][j].toUpperCase()];
-            //         this.map.putTile(index, i, j, this.layer);
-            //     }
-            // }
             this.tilemap.draw(this.matrix);
         };
         GameState.prototype.createLevel = function () {
@@ -363,6 +366,17 @@ var Words;
         MainMenuState.prototype.preload = function () {
         };
         MainMenuState.prototype.create = function () {
+            this.game.add.image(0, 0, 'green');
+            //generate buttons
+            var playBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2 - 210, "PLAY", this.play, this);
+            this.game.add.existing(playBtn);
+            var editBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2, "EDIT", this.play, this);
+            this.game.add.existing(editBtn);
+        };
+        MainMenuState.prototype.play = function () {
+            this.game.state.start("GameState");
+        };
+        MainMenuState.prototype.edit = function () {
         };
         return MainMenuState;
     })(Phaser.State);

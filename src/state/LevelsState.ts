@@ -1,5 +1,5 @@
 module Words {
-    export class GameState extends Phaser.State {
+    export class LevelState extends Phaser.State {
         game: Phaser.Game;
         matrix: CharMatrix;
         tilemap: Words.Tilemap;
