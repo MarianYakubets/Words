@@ -22,7 +22,7 @@ module Words {
         }
 
         createLevel() {
-            var level: Level = new Level();
+            var level: WordsSet = new WordsSet();
             var jObj = this.game.cache.getJSON('level');
             level.fillFromJSON(jObj);
             var matrix: CharMatrix;
@@ -35,6 +35,7 @@ module Words {
                     alert("attemp fail");
                 }
             }
+
         }
     }
 }

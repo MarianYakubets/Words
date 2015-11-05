@@ -8,12 +8,14 @@ var Words;
         App.prototype.preload = function () {
             this.game.load.json('level', 'res/data/level1.json');
             this.game.load.image('btn', 'res/img/button.png');
+            this.game.load.image('level', 'res/img/level.png');
             this.game.load.spritesheet('letter', 'res/img/letter_64.png', 64, 64);
             this.game.load.image('green', 'res/img/green.jpg');
         };
         App.prototype.create = function () {
             this.game.state.add("MainMenuState", Words.MainMenuState, true);
             this.game.state.add("GameState", Words.GameState, false);
+            this.game.state.add("EditorState", Words.EditorState, false);
             this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         };
         return App;
@@ -69,6 +71,37 @@ var Words;
         return Tilemap;
     })();
     Words.Tilemap = Tilemap;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var LevelIO = (function () {
+        function LevelIO() {
+        }
+        LevelIO.charMatrixToString = function (matrix) {
+            var s = "" + matrix.getWidth() + LevelIO.DIVIDER + matrix.getHeight();
+            for (var i = 0; i < matrix.getWidth(); i++) {
+                for (var j = 0; j < matrix.getHeight(); j++) {
+                    s += LevelIO.DIVIDER + matrix.getElement(i, j);
+                }
+            }
+            return s;
+        };
+        LevelIO.stringToCharMatrix = function (s) {
+            var elements = s.split(LevelIO.DIVIDER);
+            var matrix = new Words.CharMatrix(+elements[0], +elements[1]);
+            var elNumber = 2;
+            for (var i = 0; i < matrix.getWidth(); i++) {
+                for (var j = 0; j < matrix.getHeight(); j++) {
+                    matrix.setElement(i, j, elements[elNumber]);
+                    elNumber++;
+                }
+            }
+            return matrix;
+        };
+        LevelIO.DIVIDER = ",";
+        return LevelIO;
+    })();
+    Words.LevelIO = LevelIO;
 })(Words || (Words = {}));
 var Words;
 (function (Words) {
@@ -273,14 +306,14 @@ var Words;
 })(Words || (Words = {}));
 var Words;
 (function (Words) {
-    var GameState = (function (_super) {
-        __extends(GameState, _super);
-        function GameState() {
+    var EditorState = (function (_super) {
+        __extends(EditorState, _super);
+        function EditorState() {
             _super.call(this);
         }
-        GameState.prototype.preload = function () {
+        EditorState.prototype.preload = function () {
         };
-        GameState.prototype.create = function () {
+        EditorState.prototype.create = function () {
             //background
             this.game.add.image(0, 0, 'green');
             //generate buttons
@@ -288,17 +321,13 @@ var Words;
             this.game.add.existing(btn);
             //map for tiles
             this.tilemap = new Words.Tilemap(this.game);
-            // this.map = this.game.add.tilemap();
-            // this.map.addTilesetImage("letters", "letters", 64, 64);
-            // this.layer = this.map.create('layer', 10, 10, 64, 64);
-            var rect = new Phaser.Rectangle(400, 400, 40, 40);
         };
-        GameState.prototype.update = function () {
+        EditorState.prototype.update = function () {
         };
-        GameState.prototype.createTileMap = function () {
+        EditorState.prototype.createTileMap = function () {
             this.tilemap.draw(this.matrix);
         };
-        GameState.prototype.createLevel = function () {
+        EditorState.prototype.createLevel = function () {
             var level = new Words.Level();
             var jObj = this.game.cache.getJSON('level');
             level.fillFromJSON(jObj);
@@ -315,7 +344,29 @@ var Words;
                     alert("attemp fail");
                 }
             }
+            var result = Words.LevelIO.charMatrixToString(this.matrix);
+            console.log(result);
+            this.matrix = Words.LevelIO.stringToCharMatrix(result);
             this.createTileMap();
+        };
+        return EditorState;
+    })(Phaser.State);
+    Words.EditorState = EditorState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
+    var GameState = (function (_super) {
+        __extends(GameState, _super);
+        function GameState() {
+            _super.call(this);
+        }
+        GameState.prototype.preload = function () {
+        };
+        GameState.prototype.create = function () {
+            //background
+            this.game.add.image(0, 0, 'green');
+        };
+        GameState.prototype.update = function () {
         };
         return GameState;
     })(Phaser.State);
@@ -358,6 +409,26 @@ var Words;
 })(Words || (Words = {}));
 var Words;
 (function (Words) {
+    var LevelState = (function (_super) {
+        __extends(LevelState, _super);
+        function LevelState() {
+            _super.call(this);
+        }
+        LevelState.prototype.preload = function () {
+        };
+        LevelState.prototype.create = function () {
+            //background
+            this.game.add.image(0, 0, 'green');
+            var group = this.game.add.group();
+        };
+        LevelState.prototype.update = function () {
+        };
+        return LevelState;
+    })(Phaser.State);
+    Words.LevelState = LevelState;
+})(Words || (Words = {}));
+var Words;
+(function (Words) {
     var MainMenuState = (function (_super) {
         __extends(MainMenuState, _super);
         function MainMenuState() {
@@ -370,13 +441,14 @@ var Words;
             //generate buttons
             var playBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2 - 210, "PLAY", this.play, this);
             this.game.add.existing(playBtn);
-            var editBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2, "EDIT", this.play, this);
+            var editBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2, "EDIT", this.edit, this);
             this.game.add.existing(editBtn);
         };
         MainMenuState.prototype.play = function () {
             this.game.state.start("GameState");
         };
         MainMenuState.prototype.edit = function () {
+            this.game.state.start("EditorState");
         };
         return MainMenuState;
     })(Phaser.State);

@@ -19,11 +19,6 @@ module Words {
             this.game.add.existing(btn); 
             //map for tiles
             this.tilemap = new Words.Tilemap(this.game);
-            // this.map = this.game.add.tilemap();
-            // this.map.addTilesetImage("letters", "letters", 64, 64);
-            // this.layer = this.map.create('layer', 10, 10, 64, 64);
-
-            var rect: Phaser.Rectangle = new Phaser.Rectangle(400, 400, 40, 40);
         }
 
         update() {
@@ -35,7 +30,7 @@ module Words {
         }
 
         createLevel() {
-            var level: Level = new Level();
+            var level: WordsSet = new WordsSet();
             var jObj = this.game.cache.getJSON('level');
             level.fillFromJSON(jObj);
             var done: boolean = false;
@@ -43,7 +38,6 @@ module Words {
             //Create Matrix
             var size: number[] = Utils.getWidthAndHeight(level.getWords());
             this.matrix = new CharMatrix(size[0], size[1]);
-
 
             while (!done) {
                 try {
@@ -53,7 +47,11 @@ module Words {
                     alert("attemp fail");
                 }
             }
-            this.createTileMap()
+
+            var result: string = LevelIO.charMatrixToString(this.matrix);
+            console.log(result);
+            this.matrix = LevelIO.stringToCharMatrix(result);
+            this.createTileMap();
         }
     }
 }

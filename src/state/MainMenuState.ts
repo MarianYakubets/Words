@@ -16,7 +16,7 @@ module Words {
             var playBtn: Words.TextBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2 - 210, "PLAY", this.play, this);
             this.game.add.existing(playBtn);
 
-            var editBtn: Words.TextBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2, "EDIT", this.play, this);
+            var editBtn: Words.TextBtn = new Words.TextBtn(this.game, this.game.width / 2 - 64, this.game.height / 2, "EDIT", this.edit, this);
             this.game.add.existing(editBtn);
         }
 
