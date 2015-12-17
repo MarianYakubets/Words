@@ -40,8 +40,8 @@ module Words {
 			return new Words.Level(levelName, matrix);
 		}
 
-		public static writeLevel(levelName: string) {
-			localStorage.setItem(levelName,LevelIO.charMatrixToString)
+		public static writeLevel(levelName: string, matrix: CharMatrix) {
+			localStorage.setItem(levelName, LevelIO.charMatrixToString(matrix));
 		}
 	}
 }
